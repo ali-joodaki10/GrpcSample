@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.Protos";
+
+import "google/protobuf/empty.proto";
+
+service ProductService
+{
+	rpc AddNewProduct(stream AddNewProductRequest) returns(stream ProductReply); //bidirectional
+
+	rpc UpdateProduct(UpdateProductRequest) returns(ProductReply); //unary
+
+	rpc GetProductById(ProductByIdRequest)  returns(ProductReply);  //unary
+
+	rpc DeleteProduct(stream ProductByIdRequest) returns(google.protobuf.Empty); //client stream - void function
+
+	rpc GetProducts(google.protobuf.Empty) returns(stream ProductReply); //server stream
+
+	rpc CollectionMethod(CollectionSample) returns(CollectionSample); 
+}
+
+message AddNewProductRequest
+{
+	string name=1;
+	int32 price=2;
+}
+
+message ProductReply
+{
+	int32 id=1;
+	string name=2;
+	int32 price=3;
+}
+
+message UpdateProductRequest
+{
+	int32 id=1;
+	string name=2;
+	int32 price=3;
+}
+
+message ProductByIdRequest
+{
+	int32 id=1;
+
+}
+
+message CollectionSample
+{
+	///for List
+	repeated int32 myList=1;
+
+	///for Dictionary
+	map<int32,string> myDictionary=2;
+}
+
